@@ -4,12 +4,14 @@ services:
   reminder:
     build: .
     image: 'goodguy-qq-reminder'
+    container_name: 'goodguy-qq-reminder-reminder'
     environment:
       SEND_GROUP_ID: '' # 群号 多个群号用逗号分隔 比如："1234,5678"
     command:
       - '/home/goodguy'
   qq:
     image: 'goodguy-qq-reminder'
+    container_name: 'goodguy-qq-reminder-qq'
     environment:
       QQ: ''       # qq号 必填
       PASSWORD: '' # qq密码 使用二维码登录此处不填 有些情况下需要填写密码才能登录

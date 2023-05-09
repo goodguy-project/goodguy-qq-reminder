@@ -14,6 +14,6 @@
   - QQ 表示你的QQ号（第14行）（非常建议使用小号）
   - PASSWORD 填写你的密码（第15行）（可以不填而使用二维码登录）
 - 命令行中输入 `docker-compose up -d`
-- 稍等片刻，命令行中输入`docker logs $(docker ps -a -q --filter="name=goodguy-qq-reminder-qq-1")`，获取qq登录情况。（Windows需要使用bash输入这个命令）
+- 稍等片刻，命令行中输入`docker logs $(docker ps -a -q --filter="name=goodguy-qq-reminder-qq")`，获取qq登录情况。（Windows需要使用bash输入这个命令）
 
 如果在使用上出现问题，欢迎在issue中提出。

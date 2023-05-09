@@ -103,7 +103,7 @@ type sendGroupMsgRequest struct {
 }
 
 func sendGroupMsg(req *sendGroupMsgRequest) error {
-	request, err := http.NewRequest("POST", "http://127.0.0.1:5700/send_group_msg", bytes.NewBuffer(jsonx.Marshal(req)))
+	request, err := http.NewRequest("POST", "http://qq:5700/send_group_msg", bytes.NewBuffer(jsonx.Marshal(req)))
 	if err != nil {
 		return errorx.New(err)
 	}
