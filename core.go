@@ -115,11 +115,42 @@ func sendGroupMsg(req *sendGroupMsgRequest) error {
 	return nil
 }
 
-func doNotice(platform string, contest *proto.GetRecentContestResponse_Contest) {
+var (
+	loc, _ = time.LoadLocation("Asia/Shanghai")
+)
+
+func durationToChinese(duration time.Duration) string {
+	seconds := duration / time.Second
+	minutes := seconds / 60
+	hours := minutes / 60
+	days := hours / 24
+	var builder strings.Builder
+	if days > 0 {
+		builder.WriteString(fmt.Sprintf("%d%s", days, "天"))
+	}
+	if hours > 0 {
+		builder.WriteString(fmt.Sprintf("%d%s", hours%24, "小时"))
+	}
+	if minutes > 0 {
+		builder.WriteString(fmt.Sprintf("%d%s", minutes%60, "分钟"))
+	}
+	if seconds > 0 {
+		builder.WriteString(fmt.Sprintf("%d%s", seconds%60, "秒"))
+	}
+	return builder.String()
+}
+
+func contestToMessage(platform string, contest *proto.GetRecentContestResponse_Contest) string {
 	startTime := time.Unix(contest.GetTimestamp(), 0)
+	startTime = startTime.In(loc)
 	duration := time.Duration(contest.GetDuration()) * time.Second
-	message := fmt.Sprintf("比赛提醒：\n平台：%s\n名称：%s\n时间：%s\n时长：%s\n链接：%s\n",
-		platform, contest.GetName(), startTime.String(), duration.String(), contest.GetUrl())
+	message := fmt.Sprintf("比赛提醒：\n平台：%s\n名称：%s\n时间：%s\n时长：%s\n链接：%s",
+		platform, contest.GetName(), startTime.Format("2006年01月02日 15点04分05秒"), durationToChinese(duration), contest.GetUrl())
+	return message
+}
+
+func doNotice(platform string, contest *proto.GetRecentContestResponse_Contest) {
+	message := contestToMessage(platform, contest)
 	groupIds := strings.Split(os.Getenv("SEND_GROUP_ID"), ",")
 	for _, group := range groupIds {
 		if group == "" {
